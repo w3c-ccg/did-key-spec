@@ -423,19 +423,6 @@ Ensure the proper key length of <em>rawPublicKeyBytes</em> based on the
                     <td>49 bytes</td>
                     <td>p384-pub - P-384 public key (compressed)</td>
                   </tr>
-                  <tr>
-                    <td>`0x1202`</td>
-                    <td>?? bytes</td>
-                    <td>p521-pub - P-521 public key (compressed)</td>
-                  </tr>
-                  <tr>
-                    <td>`0x1205`</td>
-                    <td>?? bytes</td>
-                    <td>
-rsa-pub - RSA public key. DER-encoded ASN.1 type RSAPublicKey according to
-IETF RFC 8017 (PKCS #1)
-                    </td>
-                  </tr>
                 </tbody>
               </table>
 If the byte length of <em>rawPublicKeyBytes</em> does not match the expected
@@ -564,7 +551,7 @@ specification describing the key encoding is provided.
           </p>
 
           <p class="advisement">
-BLS12381 is the only instance of such a key type in the current method specification.
+BLS12-381 is the only instance of such a key type in the current method specification.
 See this document tracking its proposed standardization at IETF. See
 <a href="https://datatracker.ietf.org/doc/draft-looker-cose-bls-key-representations/">
   draft-looker-cose-bls-key-representations</a>.
@@ -605,7 +592,7 @@ Ensure that <code>d</code> is NOT present.
 Address RSA encoding for DER encoded RSA keys.
           </p>
           <p class="issue" data-number="54">
-Address BLS12381 Encoding.
+Address BLS12-381 Encoding.
           </p>
         </section>
 
@@ -919,7 +906,7 @@ This DID Method does not support deactivating the DID Document.
       </section>
 
       <section class="informative">
-        <h3>BLS 12381</h3>
+        <h3>BLS 12-381</h3>
           <p>These DID always start with <code>zUC7</code>.</p>
         <pre class="example">
           did:key:zUC7K4ndUaGZgV7Cp2yJy6JtMoUHY6u7tkcSYUvPrEidqBmLCTLmi6d5WvwnUqejscAkERJ3bfjEiSYtdPkRSE8kSa11hFBr4sTgnbZ95SJj19PN2jdvJjyzpSZgxkyyxNnBNnY
@@ -943,39 +930,6 @@ This DID Method does not support deactivating the DID Document.
           did:key:z82Lm1MpAkeJcix9K8TMiLd5NMAhnwkjjCBeWHXyu3U4oT2MVJJKXkcVBgjGhnLBn2Kaau9
           did:key:z82LkvCwHNreneWpsgPEbV3gu1C6NFJEBg4srfJ5gdxEsMGRJUz2sG9FE42shbn2xkZJh54
         </pre>
-      </section>
-
-      <section class="informative">
-        <h3>P-521</h3>
-          <p>These DID always start with <code>z2J9</code>.</p>
-        <pre class="example">
-          did:key:z2J9gaYxrKVpdoG9A4gRnmpnRCcxU6agDtFVVBVdn1JedouoZN7SzcyREXXzWgt3gGiwpoHq7K68X4m32D8HgzG8wv3sY5j7
-          did:key:z2J9gcGdb2nEyMDmzQYv2QZQcM1vXktvy1Pw4MduSWxGabLZ9XESSWLQgbuPhwnXN7zP7HpTzWqrMTzaY5zWe6hpzJ2jnw4f
-        </pre>
-      </section>
-
-      <section class="informative">
-        <h3>RSA</h3>
-
-        <p>See also <a href="#rsa-repr">RSA Public Key
-          Representation</a>.</p>
-
-        <section class="informative" id="rsa-2048">
-          <h4>2048-bit</h4>
-          <p>These DID always start with <code>z4MX</code>.</p>
-          <pre class="example">
-            did:key:z4MXj1wBzi9jUstyPMS4jQqB6KdJaiatPkAtVtGc6bQEQEEsKTic4G7Rou3iBf9vPmT5dbkm9qsZsuVNjq8HCuW1w24nhBFGkRE4cd2Uf2tfrB3N7h4mnyPp1BF3ZttHTYv3DLUPi1zMdkULiow3M1GfXkoC6DoxDUm1jmN6GBj22SjVsr6dxezRVQc7aj9TxE7JLbMH1wh5X3kA58H3DFW8rnYMakFGbca5CB2Jf6CnGQZmL7o5uJAdTwXfy2iiiyPxXEGerMhHwhjTA1mKYobyk2CpeEcmvynADfNZ5MBvcCS7m3XkFCMNUYBS9NQ3fze6vMSUPsNa6GVYmKx2x6JrdEjCk3qRMMmyjnjCMfR4pXbRMZa3i
-          </pre>
-        </section>
-
-        <section class="informative" id="rsa-4096">
-          <h4>4096-bit</h4>
-          <p>These DID always start with <code>zgg</code>.</p>
-          <pre class="example">
-            did:key:zgghBUVkqmWS8e1ioRVp2WN9Vw6x4NvnE9PGAyQsPqM3fnfPf8EdauiRVfBTcVDyzhqM5FFC7ekAvuV1cJHawtfgB9wDcru1hPDobk3hqyedijhgWmsYfJCmodkiiFnjNWATE7PvqTyoCjcmrc8yMRXmFPnoASyT5beUd4YZxTE9VfgmavcPy3BSouNmASMQ8xUXeiRwjb7xBaVTiDRjkmyPD7NYZdXuS93gFhyDFr5b3XLg7Rfj9nHEqtHDa7NmAX7iwDAbMUFEfiDEf9hrqZmpAYJracAjTTR8Cvn6mnDXMLwayNG8dcsXFodxok2qksYF4D8ffUxMRmyyQVQhhhmdSi4YaMPqTnC1J6HTG9Yfb98yGSVaWi4TApUhLXFow2ZvB6vqckCNhjCRL2R4MDUSk71qzxWHgezKyDeyThJgdxydrn1osqH94oSeA346eipkJvKqYREXBKwgB5VL6WF4qAK6sVZxJp2dQBfCPVZ4EbsBQaJXaVK7cNcWG8tZBFWZ79gG9Cu6C4u8yjBS8Ux6dCcJPUTLtixQu4z2n5dCsVSNdnP1EEs8ZerZo5pBgc68w4Yuf9KL3xVxPnAB1nRCBfs9cMU6oL1EdyHbqrTfnjE8HpY164akBqe92LFVsk8RusaGsVPrMekT8emTq5y8v8CabuZg5rDs3f9NPEtogjyx49wiub1FecM5B7QqEcZSYiKHgF4mfkteT2
-          </pre>
-        </section>
-
       </section>
 
     </section>
@@ -1039,48 +993,6 @@ strongly discouraged.
 
     </section>
 
-  </section>
-
-  <section class="appendix informative" id="rsa-repr">
-    <h2>RSA Public Key Representation</h2>
-    <p>An RSA public key for did:key is represented as a DER-encoded
-    <code>RSAPublicKey</code> data structure as specified in
-    <a href="https://datatracker.ietf.org/doc/html/rfc3447#appendix-A.1.1">RFC
-      3447 (PKCS #1)</a>, as registered in the Multicodec table (code
-    <code>0x1205</code>).</p>
-
-    <p>DER is a canonical encoding of ASN.1 values. For the aid of implementers
-      who do not fully support ASN.1/DER, the following subsections describe the
-      public key representation for RSA public keys that use some common
-      parameters.</p>
-
-    <section class="informative">
-    <h4>2048-bit modulus, public exponent 65537</h4>
-    A public key with 2048-bit modulus <em>modulus</em> and public exponent
-    65537 is represented by the concatenation of the following octet sequences:
-    <ul>
-      <li><code>[48, 130, 1, 10, 2, 130, 1, 1, 0]</code></li>
-      <li><code>[0]</code> <strong>if and only if</strong> the
-        most-significant bit of <em>modulus</em> is set.</li>
-      <li><em>modulus</em> (256 octets)</li>
-      <li><code>[2, 3, 1, 0, 1]</code></li>
-    </ul>
-    <p>See also the example <a href="#rsa-2048">2048-bit test vector</a>.</p>
-    </section>
-
-    <section class="informative">
-    <h4>4096-bit modulus, public exponent 65537</h4>
-    A public key with 4096-bit modulus <em>modulus</em> and public exponent
-    65537 is represented by the concatenation of the following octet sequences:
-    <ul>
-      <li><code>[48, 130, 2, 10, 2, 130, 2, 1, 0]</code></li>
-      <li><code>[0]</code> <strong>if and only if</strong> the
-        most-significant bit of <em>modulus</em> is set.</li>
-      <li><em>modulus</em> (512 octets)</li>
-      <li><code>[2, 3, 1, 0, 1]</code></li>
-    </ul>
-    <p>See also the example <a href="#rsa-4096">4096-bit test vector</a>.</p>
-    </section>
   </section>
 
   <section class="appendix informative">
