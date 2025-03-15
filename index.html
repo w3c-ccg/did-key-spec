@@ -8,15 +8,14 @@
       For the three scripts below, if your spec resides on dev.w3 you can check them
       out in the same tree and use relative links so that they'll work offline,
      -->
-    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
-    <script src="./common.js" class="remove"></script>
+    <script src='https://www.w3.org/Tools/respec/respec-w3c' class='remove'></script>
     <script type="text/javascript" class="remove">
       var respecConfig = {
         // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
-        specStatus: "unofficial",
+        specStatus: "CG-DRAFT",
 
         // the specification's short name, as in http://www.w3.org/TR/short-name/
-        shortName: "did-method-key",
+        shortName: "did-key",
 
         // subtitle for the spec
         subtitle: "A DID Method for Static Cryptographic Keys",
@@ -33,7 +32,22 @@
         // previousMaturity:  "WD",
 
         // extend the bibliography entries
-        localBiblio: ccg.localBiblio,
+        localBiblio: {
+          'THORMARKER': {
+            title: 'On using the same key pair for Ed25519 and an X25519 based KEM',
+            href: 'https://eprint.iacr.org/2021/509.pdf',
+            authors: ['Erik Thormarker'],
+            status: 'Internet-Draft',
+            publisher: 'Cryptology ePrint Archive'
+          },
+          'OSCORE': {
+            title: 'Group OSCORE - Secure Group Communication for CoAP',
+            href: 'https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-groupcomm',
+            authors: ['M. Tiloca', 'G. Selander', 'F. Palombini', 'J. Mattsson', 'J. Park'],
+            status: 'Internet-Draft',
+            publisher: 'Internet Engineering Task Force (IETF)'
+          }
+        },
         doJsonLd: true,
 
         github: "https://github.com/w3c-ccg/did-method-key",
@@ -48,14 +62,7 @@
         // editors, add as many as you like
         // only "name" is required
         editors: [
-          { name: "Manu Sporny", url: "https://www.linkedin.com/in/manusporny/",
-            company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/"},
-          { name: "Dmitri Zagidulin", url: "https://www.linkedin.com/in/dzagidulin/",
-            company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/"},
-          { name: "Dave Longley", url: "https://github.com/dlongley",
-            company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/"},
-          { name: "Orie Steele", url: "https://github.com/OR13",
-            company: "Transmute", companyURL: "https://transmute.industries/"}
+          { name: "TBD"}
         ],
         // authors, add as many as you like.
         // This is optional, uncomment if you have authors as well as editors.
@@ -69,14 +76,7 @@
           { name: "Manu Sporny", url: "https://digitalbazaar.com/",
             company: "Digital Bazaar", companyURL: "https://digitalbazaar.com/" }
         ],
-        // name of the WG
-        wg:           "W3C Credentials Community Group",
-
-        // URI of the public WG page
-        wgURI:        "https://www.w3.org/community/credentials/",
-
-        // name (with the @w3c.org) of the public mailing to which comments are due
-        wgPublicList: "public-credentials",
+        group: 'credentials',
 
         // URI of the patent status for this WG, for Rec-track documents
         // !!!! IMPORTANT !!!!
@@ -165,7 +165,7 @@ some of the more centralized DID Methods provide strong system control
 guarantees, the general approaches tend to be expensive to setup and operate.
 Some use cases requiring DIDs do not need the guarantees provided by these
 heavy-weight systems. For example, a DID that will only be used for a single,
-ephemeral interaction might not need to be registered, updated, or deactivated, 
+ephemeral interaction might not need to be registered, updated, or deactivated,
 or where private keys are protected by software or hardware isolation.
 These are a few of the cases where using <tt>did:key</tt> might offer unique benefits.
       </p>
@@ -178,6 +178,8 @@ the operations it supports, and some security and privacy considerations that
 implementers might want to be aware of when implementing.
       </p>
 
+      <section id="conformance"></section>
+
     </section>
 
     <section class="normative">
@@ -186,9 +188,10 @@ implementers might want to be aware of when implementing.
       <p>
 The format for the <tt>did:key</tt> method conforms to the [[DID-CORE]]
 specification and is simple. It consists of the <code>did:key</code> prefix,
-followed by a Multibase [[MULTIBASE]] base58-btc encoded value that is a
-concatenation of the Multicodec [[MULTICODEC]] identifier for the public key
-type and the raw bytes associated with the public key format.
+followed by a <a data-cite="CID#Multibase">Multibase</a> base58-btc encoded
+value that is a concatenation of the <a data-cite="CID#Multikey">Multikey</a>
+identifier for the public key type and the raw bytes associated with the public
+key format.
       </p>
 
       <p>
@@ -536,7 +539,7 @@ There are 2 categories of JWK expressions for multicodec encoded public keys.
           </p>
 
           <p>
-Standard JWK representations can be found under the IANA registry for 
+Standard JWK representations can be found under the IANA registry for
 <a href="https://www.iana.org/assignments/jose/jose.xhtml">
   JSON Object Signing and Encryption (JOSE)
 </a>.
@@ -548,7 +551,7 @@ Standard JWK representations can be found under the IANA registry for
               <a href="https://www.rfc-editor.org/rfc/rfc7517">RFC7515: JSON Web Key (JWK)</a>
             </li>
             <li>
-              <a href="https://www.rfc-editor.org/rfc/rfc8037">RFC8037: 
+              <a href="https://www.rfc-editor.org/rfc/rfc8037">RFC8037:
                 CFRG Elliptic Curve Diffie-Hellman (ECDH) and Signatures
                 in JSON Object Signing and Encryption (JOSE)</a>
             </li>
@@ -556,8 +559,8 @@ Standard JWK representations can be found under the IANA registry for
           </div>
 
           <p>
-In cases where a key type has not been formally standardized yet a 
-specification describing the key encoding is provided. 
+In cases where a key type has not been formally standardized yet a
+specification describing the key encoding is provided.
           </p>
 
           <p class="advisement">
@@ -573,24 +576,24 @@ Implementations MUST conform to the normative requirements of the RFCs and speci
 
            <p>
 The following algorithm can be used to encode a multicodec value to a
-JSON Web Key. A <em>multicodecValue</em>, <em>rawPublicKeyBytes</em> 
+JSON Web Key. A <em>multicodecValue</em>, <em>rawPublicKeyBytes</em>
 are the required inputs. An <em>encodedJWK</em> is the output.
           </p>
 
           <ol class="algorithm">
             <li>
-Obtain the associated <code>kty</code>, <code>crv</code>, <code>n</code>,<code>e</code> 
+Obtain the associated <code>kty</code>, <code>crv</code>, <code>n</code>,<code>e</code>
 values for the JWK representation of the key type identified by <em>multicodecValue</em>.
             </li>
             <li>
-              If <code>y</code> is required member of the public key, 
-              perform elliptic curve expansion by applying 
-<a href="https://tools.ietf.org/id/draft-jivsov-ecc-compact-05.html">decompression algorithm specified here.</a> 
-to obtain <code>y</code> and <code>x</code>. 
+              If <code>y</code> is required member of the public key,
+              perform elliptic curve expansion by applying
+<a href="https://tools.ietf.org/id/draft-jivsov-ecc-compact-05.html">decompression algorithm specified here.</a>
+to obtain <code>y</code> and <code>x</code>.
 Otherwise simply encode <code>x</code> according to the associated RFCs.
             </li>
             <li>
-Encode the final JWK object by including the members required for the given key type identified by <em>multicodecValue</em>, 
+Encode the final JWK object by including the members required for the given key type identified by <em>multicodecValue</em>,
 according to the requirements defined by the relevant RFC.
             </li>
             <li>
@@ -834,11 +837,11 @@ This DID Method does not support deactivating the DID Document.
 
     <section class="informative">
       <h2>Test Vectors</h2>
-  
-      
+
+
       <p>For a full list of test vectors see <a href="https://github.com/w3c-ccg/did-method-key/tree/main/test-vectors">test vectors</a>.</p>
       <p>We provide only the <code>verificationMethod</code> section of the DID Document in these examples.</p>
-      
+
       <section class="informative">
         <h3>Ed25519 / X25519</h3>
         <p>These DID always start with <code>z6Mk</code>.</p>
