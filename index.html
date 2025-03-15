@@ -50,11 +50,11 @@
         },
         doJsonLd: true,
 
-        github: "https://github.com/w3c-ccg/did-method-key",
+        github: "https://github.com/w3c-ccg/did-key-spec",
         includePermalinks: false,
 
         // if there a publicly available Editor's Draft, this is the link
-        edDraftURI: "https://w3c-ccg.github.io/did-method-key/",
+        edDraftURI: "https://w3c-ccg.github.io/did-key-spec/",
 
         // if this is a LCWD, uncomment and set the end of its review period
         // lcEnd: "2009-08-05",
@@ -121,7 +121,7 @@ ol.algorithm li:before { font-weight: bold; counter-increment: numsection; conte
   <body>
     <section id='abstract'>
       <p>
-Decentralized Identifiers (DIDs) are a new type of identifier for verifiable,
+Decentralized Identifiers (DIDs) are a type of identifier for verifiable,
 decentralized digital identity. These new identifiers are designed to enable the
 controller of a DID to prove control over it and to be implemented independently
 of any centralized registry, identity provider, or certificate authority.
@@ -150,7 +150,7 @@ and no official endorsement should be inferred.
       <h2>Introduction</h2>
 
       <p>
-Decentralized Identifiers (DIDs) [[DID-CORE]] are a new type of identifier for
+Decentralized Identifiers (DIDs) [[DID]] are a type of identifier for
 verifiable, decentralized digital identity. These new identifiers are designed
 to enable the controller of a DID to prove control over it and to be implemented
 independently of any centralized registry, identity provider, or certificate
@@ -186,7 +186,7 @@ implementers might want to be aware of when implementing.
       <h2 id="format">The did:key Format</h2>
 
       <p>
-The format for the <tt>did:key</tt> method conforms to the [[DID-CORE]]
+The format for the <tt>did:key</tt> method conforms to the [[[DID]]]
 specification and is simple. It consists of the <code>did:key</code> prefix,
 followed by a <a data-cite="CID#Multibase">Multibase</a> base58-btc encoded
 value that is a concatenation of the <a data-cite="CID#Multikey">Multikey</a>
@@ -288,7 +288,7 @@ associated DID Document:
 The following algorithm can be used for expanding a did:key identifier to a DID
 Document. An <em>identifier</em> and <em>options</em> are the required inputs.
 Implementations are expected to set a reasonable default for the
-<em>options.publicKeyFormat</em> value such as `JsonWebKey2020` or `Multikey`.
+<em>options.publicKeyFormat</em> value such as `JsonWebKey` or `Multikey`.
 The <em>options.enableExperimentalPublicKeyTypes</em> value SHOULD be set to
 `false`. The <em>options.defaultContext</em> value SHOULD be set to an array
 where the first element is the string value `https://www.w3.org/ns/did/v1`.
@@ -459,7 +459,7 @@ If <em>publicKeyFormat</em> is not known to the implementation, an
             </li>
             <li>
 If <em>options.enableExperimentalPublicKeyTypes</em> is set to `false` and
-<em>publicKeyFormat</em> is not `Multikey`, `JsonWebKey2020`, or
+<em>publicKeyFormat</em> is not `Multikey`, `JsonWebKey`, or
 `Ed25519VerificationKey2020`, an `invalidPublicKeyType` error MUST be raised.
             </li>
             <li>
@@ -475,7 +475,7 @@ If <em>publicKeyFormat</em> is `Multikey` or `Ed25519VerificationKey2020`,
 set the <em>verificationMethod.publicKeyMultibase</em> value to
 <em>multibaseValue</em>.
             <li>
-If <em>publicKeyFormat</em> is `JsonWebKey2020`, set the
+If <em>publicKeyFormat</em> is `JsonWebKey`, set the
 <em>verificationMethod.publicKeyJwk</em> value to the result of
 passing <em>multicodecValue</em> and <em>rawPublicKeyBytes</em> to
 <a href="#encode-jwk-algorithm"></a>.
@@ -659,7 +659,7 @@ If <em>publicKeyFormat</em> is not known to the implementation, an
             </li>
             <li>
 If <em>options.enableExperimentalPublicKeyTypes</em> is set to `false` and
-<em>publicKeyFormat</em> is not `Multikey`, `JsonWebKey2020`, or
+<em>publicKeyFormat</em> is not `Multikey`, `JsonWebKey`, or
 `X25519KeyAgreementKey2020`, an `invalidPublicKeyType` error MUST be raised.
             </li>
             <li>
@@ -675,7 +675,7 @@ If <em>publicKeyFormat</em> is `Multikey` or `X25519KeyAgreementKey2020`,
 set the <em>verificationMethod.publicKeyMultibase</em> value to
 <em>multibaseValue</em>.
             <li>
-If <em>publicKeyFormat</em> is `JsonWebKey2020`, set the
+If <em>publicKeyFormat</em> is `JsonWebKey`, set the
 <em>verificationMethod.publicKeyJwk</em> value to the result of
 passing <em>multicodecValue</em> and <em>rawPublicKeyBytes</em> to
 <a href="#encode-jwk-algorithm"></a>.
@@ -771,7 +771,7 @@ https://w3id.org/security/suites/x25519-2020/v1
                     </td>
                   </tr>
                   <tr>
-                    <td>`JsonWebKey2020`</td>
+                    <td>`JsonWebKey`</td>
                     <td>
 https://w3id.org/security/suites/jws-2020/v1
                     </td>
@@ -838,7 +838,7 @@ This DID Method does not support deactivating the DID Document.
 "verificationMethod": [
   {
     "id": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp#z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-    "type": "JsonWebKey2020",
+    "type": "JsonWebKey",
     "controller": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
     "publicKeyJwk": {
       "kty": "OKP",
@@ -848,7 +848,7 @@ This DID Method does not support deactivating the DID Document.
   },
   {
     "id": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp#z6LShs9GGnqk85isEBzzshkuVWrVKsRp24GnDuHk8QWkARMW",
-    "type": "JsonWebKey2020",
+    "type": "JsonWebKey",
     "controller": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
     "publicKeyJwk": {
       "kty": "OKP",
