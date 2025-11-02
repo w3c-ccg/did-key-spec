@@ -845,11 +845,125 @@ This DID Method does not support deactivating the DID Document.
     </section>
 
     <section class="informative">
-      <h2>Security and Privacy Considerations</h2>
+      <h2>Privacy Considerations</h2>
 
       <p>
-There are a number of security and privacy considerations that implementers
-will want to take into consideration when implementing this specification.
+This section contains a variety of privacy considerations that people using
+the `did:key` Method are advised to consider before deploying this
+technology in a production setting. Readers are urged to read the
+<a data-cite="?CID#privacy-considerations">Privacy Considerations</a> section
+of the [[[CID]]] specification, as well as the
+<a data-cite="?DID#privacy-considerations">Privacy Considerations</a> section
+of the [[[DID]]] specification, before reading this section.
+      </p>
+
+      <section class="informative">
+        <h3>Identifier Correlation Risks</h3>
+
+        <p>
+The `did:key` method encodes the public key directly in the identifier itself,
+creating a deterministic relationship between the key material and the DID.
+This means that any two systems that receive the same `did:key` identifier can
+immediately recognize it as referring to the same subject, enabling correlation
+across different contexts and relying parties. Unlike registry-based DID methods
+where the identifier can be an opaque value, `did:key` identifiers are
+intrinsically tied to the cryptographic key, making the identifier both globally
+unique and globally correlatable.
+        </p>
+
+        <p>
+This correlation risk is particularly acute in scenarios where a subject might
+wish to present different personas or maintain separation between different
+interactions. If the same `did:key` is reused across multiple verifiers,
+service providers, or interactions, those parties can collude or independently
+determine that they are interacting with the same subject, potentially building
+comprehensive profiles of the subject's activities without their knowledge or consent.
+        </p>
+      </section>
+
+      <section class="informative">
+        <h3>No Key Rotation</h3>
+
+        <p>
+The `did:key` method does not support key rotation because the identifier is
+derived directly from the public key material itself. Any change to the
+cryptographic key would result in an entirely different DID, effectively
+creating a new identity rather than updating an existing one. This limitation
+has significant privacy implications, as there is no mechanism to recover
+privacy after a correlation event or to refresh the identifier while maintaining
+continuity of the underlying digital identity.
+        </p>
+
+        <p>
+In long-lived relationships or scenarios where privacy requirements evolve over
+time, the inability to rotate keys without changing identifiers forces a choice
+between maintaining identifier continuity and improving privacy posture. This
+makes `did:key` particularly unsuitable for use cases where subjects may need
+to respond to correlation attacks, regulatory requirements for periodic key
+updates, or evolving privacy threat models over the lifetime of the identifier.
+        </p>
+      </section>
+
+      <section class="informative">
+        <h3>Direct Public Key Exposure</h3>
+
+        <p>
+Every `did:key` identifier directly exposes the complete public key material
+as part of the identifier string itself. This is fundamentally different from
+registry-based DID methods where the identifier is a reference that must be
+resolved to obtain the public key. With `did:key`, anyone who observes the
+identifier in any context—whether in a credential, a transaction log, a
+communication header, or any other location—immediately gains access to the
+full cryptographic public key without any additional resolution step.
+        </p>
+
+        <p>
+This constant exposure of public key material increases the attack surface for
+cryptanalysis and makes it impossible to implement selective disclosure of
+verification methods. It also means that any storage or transmission of the
+identifier itself, regardless of context, constitutes storage and transmission
+of cryptographic material, which may have implications for systems with strict
+data handling requirements or key management policies.
+        </p>
+      </section>
+
+      <section class="informative">
+        <h3>Pairwise DID Limitations</h3>
+
+        <p>
+While the `did:key` method can technically be used to create pairwise DIDs by
+generating a new cryptographic key pair for each relationship, this approach
+significantly increases the operational burden on the subject. Each new
+pairwise relationship requires generating, storing, and managing an additional
+private key, along with the associated backup and recovery procedures. For
+subjects engaged in numerous relationships, this can quickly become
+unmanageable and increase the risk of key loss.
+        </p>
+
+        <p>
+Additionally, unlike registry-based methods where a single key can be used to
+control multiple pairwise DIDs through controller relationships, `did:key`
+requires actual generation of new key material for each pairwise identifier.
+This makes it difficult to implement recovery mechanisms or delegate key
+management to trusted services, as each `did:key` represents an independent
+cryptographic identity with no hierarchical or delegated relationship to other
+identifiers controlled by the same subject.
+        </p>
+      </section>
+
+    </section>
+
+    <section class="informative">
+      <h2>Security Considerations</h2>
+
+      <p>
+This section contains a variety of security considerations that people using
+the `did:key` Method are advised to consider before deploying this
+technology in a production setting. Readers are urged to read the
+<a data-cite="?CID#security-considerations">Security Considerations</a> section
+of the [[[CID]]] specification, as well as the
+<a data-cite="?DID#security-considerations">Security Considerations</a> section
+of the [[[DID]]] specification, before reading this section.
       </p>
 
       <section class="informative">
