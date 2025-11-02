@@ -87,7 +87,27 @@
         wgPatentURI:  "https://www.w3.org/2004/01/pp-impl/98922/status",
         maxTocLevel: 2,
         inlineCSS: true,
-        postProcess: [window.respecVc.createVcExamples]
+        postProcess: [window.respecVc.createVcExamples],
+        xref: ["web-platform", "cid", "did"],
+        lint: {
+          "informative-dfn": false
+        },
+        otherLinks: [{
+          key: "Related Documents",
+          data: [{
+            value: "Controlled Identifiers v1.0",
+            href: "https://www.w3.org/TR/cid/"
+          }, {
+            value: "Decentralized Identifiers v1.0",
+            href: "https://www.w3.org/TR/did/"
+          }, {
+            value: "DID Use Cases and Requirements",
+            href: "https://www.w3.org/TR/did-use-cases/"
+          }, {
+            value: "DID Core Implementation Report",
+            href: "https://w3c.github.io/did-test-suite/"
+          }]
+        }]
       };
     </script>
     <style>
@@ -123,14 +143,14 @@ ol.algorithm li:before { font-weight: bold; counter-increment: numsection; conte
   <body>
     <section id='abstract'>
       <p>
-Decentralized Identifiers (DIDs) are a type of identifier for verifiable,
-decentralized digital identity. These new identifiers are designed to enable the
-controller of a DID to prove control over it and to be implemented independently
-of any centralized registry, identity provider, or certificate authority.
+[=Decentralized Identifiers=] (DIDs) are a type of identifier for verifiable,
+decentralized digital identity. These identifiers are designed to enable the
+[]=controller=] of a DID to prove control over the identifier in a way that is
+independent of any centralized registry, identity provider, or certificate authority.
 These sorts of identifiers often utilize a heavy-weight registry, such as ones
 utilizing Decentralized Ledger Technologies (DLT), to create, read, update,
-and deactivate DIDs. This specification describes a non-registry based DID
-Method based on expanding a cryptographic public key into a DID Document. This
+and deactivate DIDs. This specification describes a non-registry based [=DID
+Method=] based on expanding a cryptographic public key into a [=DID Document=]. This
 approach provides the simplest possible implementation of a DID Method that
 is able to achieve many, but not all, of the benefits of utilizing DIDs.
       </p>
@@ -152,13 +172,13 @@ and no official endorsement should be inferred.
       <h2>Introduction</h2>
 
       <p>
-Decentralized Identifiers (DIDs) [[DID]] are a type of identifier for
-verifiable, decentralized digital identity. These new identifiers are designed
-to enable the controller of a DID to prove control over it and to be implemented
-independently of any centralized registry, identity provider, or certificate
-authority. These sorts of identifiers often utilize a heavy-weight registry,
-such as ones utilizing Decentralized Ledger Technologies (DLT), to create, read,
-update, and deactivate DIDs.
+[=Decentralized Identifiers=] (DIDs) are a type of identifier for verifiable,
+decentralized digital identity. These new identifiers are designed to enable the
+controller of a DID to prove control over it and to be implemented independently
+of any centralized registry, identity provider, or certificate authority. These
+sorts of identifiers often utilize a heavy-weight registry, such as ones
+utilizing Decentralized Ledger Technologies (DLT), to create, read, update, and
+deactivate DIDs.
       </p>
 
       <p>
@@ -169,13 +189,16 @@ Some use cases requiring DIDs do not need the guarantees provided by these
 heavy-weight systems. For example, a DID that will only be used for a single,
 ephemeral interaction might not need to be registered, updated, or deactivated,
 or where private keys are protected by software or hardware isolation.
-These are a few of the cases where using <tt>did:key</tt> might offer unique benefits.
+These are a few of the cases where using `did:key` might offer unique benefits.
       </p>
-<p class="advisement">
-Use of <tt>did:key</tt> for long-lived use cases is only recommended when accompanied with high confidence in hardware isolation.
-</p>
+
+      <p class="advisement">
+Use of `did:key` for long-lived use cases is only recommended when accompanied
+with high confidence in hardware isolation.
+      </p>
+
       <p>
-The rest of this document outlines the syntax for the <tt>did:key</tt> method,
+The rest of this document outlines the syntax for the `did:key` method,
 the operations it supports, and some security and privacy considerations that
 implementers might want to be aware of when implementing.
       </p>
@@ -185,11 +208,11 @@ implementers might want to be aware of when implementing.
     </section>
 
     <section class="normative">
-      <h2 id="format">The did:key Format</h2>
+      <h2>did:key Identifier Syntax</h2>
 
       <p>
-The format for the <tt>did:key</tt> method conforms to the [[[DID]]]
-specification and is simple. It consists of the <code>did:key</code> prefix,
+The format for the `did:key` method conforms to the [[[DID]]]
+specification and is simple. It consists of the `did:key` prefix,
 followed by a <a data-cite="CID#Multibase">Multibase</a> base58-btc encoded
 value that is a concatenation of the <a data-cite="CID#Multikey">Multikey</a>
 identifier for the public key type and the raw bytes associated with the public
@@ -215,7 +238,7 @@ did-key-format := did:key:MULTIBASE(base58-btc, MULTICODEC(public-key-type, raw-
       </tt>
 
       <p>
-A simple example of a valid Ed25519 <tt>did:key</tt> DID is:
+A simple example of a valid Ed25519 `did:key` DID is:
       </p>
 
       <pre class="example" title="A simple Ed25519 did:key value">
@@ -228,9 +251,9 @@ did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK
       <h2>Operations</h2>
 
       <p>
-The following section outlines the DID operations for the <tt>did:key</tt>
+The following section outlines the DID operations for the `did:key`
 method. Implementers might note that this DID Method is purely generative,
-requiring no look ups in a registry. Since <tt>did:key</tt> values are not
+requiring no look ups in a registry. Since `did:key` values are not
 stored in any registry, they cannot be updated or deactivated.
       </p>
 
@@ -238,12 +261,12 @@ stored in any registry, they cannot be updated or deactivated.
         <h3>Create</h3>
 
         <p>
-Creating a <tt>did:key</tt> value consists of creating a cryptographic key pair
-and encoding the public key using the format provided in  Section <a
-href="#format"></a>. The creation of a DID Document is also performed by taking
-the public key value and expanding it into DID Document. An example is given
-below that expands the ed25519 <tt>did:key</tt>
-<code>did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK</code> into its
+Creating a `did:key` value consists of creating a cryptographic key pair and
+encoding the public key using the format provided in  Section
+[[[#did-key-identifier-syntax]]]. The creation of a DID Document is also
+performed by taking the public key value and expanding it into DID Document. An
+example is given below that expands the ed25519 `did:key`
+`did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK` into its
 associated DID Document:
         </p>
 
@@ -571,22 +594,22 @@ are the required inputs. An <em>encodedJWK</em> is the output.
 
           <ol class="algorithm">
             <li>
-Obtain the associated <code>kty</code>, <code>crv</code>, <code>n</code>,<code>e</code>
+Obtain the associated `kty`, `crv`, `n`,`e`
 values for the JWK representation of the key type identified by <em>multicodecValue</em>.
             </li>
             <li>
-              If <code>y</code> is required member of the public key,
+              If `y` is required member of the public key,
               perform elliptic curve expansion by applying
 <a href="https://tools.ietf.org/id/draft-jivsov-ecc-compact-05.html">decompression algorithm specified here.</a>
-to obtain <code>y</code> and <code>x</code>.
-Otherwise simply encode <code>x</code> according to the associated RFCs.
+to obtain `y` and `x`.
+Otherwise simply encode `x` according to the associated RFCs.
             </li>
             <li>
 Encode the final JWK object by including the members required for the given key type identified by <em>multicodecValue</em>,
 according to the requirements defined by the relevant RFC.
             </li>
             <li>
-Ensure that <code>d</code> is NOT present.
+Ensure that `d` is NOT present.
             </li>
           </ol>
 
@@ -797,7 +820,7 @@ Return <em>contextArray</em>.
         <h3>Read</h3>
 
         <p>
-Reading a <tt>did:key</tt> value is a matter of deterministically expanding  the
+Reading a `did:key` value is a matter of deterministically expanding  the
 value to a DID Document. This process is described in Section <a
 href="#create"></a>.
         </p>
@@ -833,11 +856,11 @@ will want to take into consideration when implementing this specification.
         <h3>Key Rotation Not Supported</h3>
 
         <p>
-The <tt>did:key</tt> method is a purely generative method, which means that
-updates are not supported. This can be an issue if a <tt>did:key</tt> is
+The `did:key` method is a purely generative method, which means that
+updates are not supported. This can be an issue if a `did:key` is
 expected to be used over a long period of time. For example, if a
-<tt>did:key</tt> is ever compromised, it is not possible to rotate the
-compromised key. For this reason, using a <tt>did:key</tt> for interactions
+`did:key` is ever compromised, it is not possible to rotate the
+compromised key. For this reason, using a `did:key` for interactions
 that last weeks to months is strongly discouraged.
         </p>
       </section>
@@ -846,11 +869,11 @@ that last weeks to months is strongly discouraged.
         <h3>Deactivation Not Supported</h3>
 
         <p>
-The <tt>did:key</tt> method is a purely generative method, which means that
-deactivations are not supported. This can be an issue if a <tt>did:key</tt> is
+The `did:key` method is a purely generative method, which means that
+deactivations are not supported. This can be an issue if a `did:key` is
 expected to be used over a long period of time. For example, if a
-<tt>did:key</tt> is ever compromised, it is not possible to deactivate the  DID
-to stop an attacker from using it. For this reason, using a <tt>did:key</tt> for
+`did:key` is ever compromised, it is not possible to deactivate the  DID
+to stop an attacker from using it. For this reason, using a `did:key` for
 interactions that last weeks to months is strongly discouraged.
         </p>
       </section>
@@ -861,7 +884,7 @@ interactions that last weeks to months is strongly discouraged.
         <p>
 Some implementations might utlize a key derivation function when converting from
 an ed25519 public key to a Curve25519 ECDH key, used in the
-<code>keyAgreement</code> verification method. It is expected that this is a
+`keyAgreement` verification method. It is expected that this is a
 relatively safe operation, but implementers might consider that there exists no
 mathematical proof that confirms this assumption.
         </p>
@@ -871,9 +894,9 @@ mathematical proof that confirms this assumption.
         <h3>Long Term Usage is Discouraged</h3>
 
         <p>
-Since there is no support for update and deactivate for the <tt>did:key</tt>
+Since there is no support for update and deactivate for the `did:key`
 method, it is not possible to recover from a security compromise. For this
-reason, using a <tt>did:key</tt> for interactions that last weeks to months is
+reason, using a `did:key` for interactions that last weeks to months is
 strongly discouraged.
         </p>
       </section>
@@ -885,7 +908,7 @@ strongly discouraged.
   <section class="appendix informative">
     <h2>Test Vectors</h2>
 
-    <p>We provide only the <code>verificationMethod</code> section of the DID Document in these examples.</p>
+    <p>We provide only the `verificationMethod` section of the DID Document in these examples.</p>
 
     <section class="informative">
       <h3>Ed25519</h3>
@@ -947,7 +970,7 @@ useful when perform such functions as key agreement between two systems.
 
     <section class="informative">
       <h3>Secp256k1</h3>
-        <p>These DID always start with <code>zQ3s</code>.</p>
+        <p>These DID always start with `zQ3s`.</p>
       <pre class="example">
         did:key:zQ3shokFTS3brHcDQrn82RUDfCZESWL1ZdCEJwekUDPQiYBme
         did:key:zQ3shtxV1FrJfhqE1dvxYRcCknWNjHc3c5X1y3ZSoPDi2aur2
