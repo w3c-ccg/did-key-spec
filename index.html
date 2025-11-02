@@ -88,7 +88,7 @@
         maxTocLevel: 2,
         inlineCSS: true,
         postProcess: [window.respecVc.createVcExamples],
-        xref: ["web-platform", "cid", "did"],
+        xref: ["web-platform", "cid", "did", "vc-data-model"],
         lint: {
           "informative-dfn": false
         },
@@ -145,7 +145,7 @@ ol.algorithm li:before { font-weight: bold; counter-increment: numsection; conte
       <p>
 [=Decentralized Identifiers=] (DIDs) are a type of identifier for verifiable,
 decentralized digital identity. These identifiers are designed to enable the
-[]=controller=] of a DID to prove control over the identifier in a way that is
+[=controller=] of a DID to prove control over the identifier in a way that is
 independent of any centralized registry, identity provider, or certificate authority.
 These sorts of identifiers often utilize a heavy-weight registry, such as ones
 utilizing Decentralized Ledger Technologies (DLT), to create, read, update,
@@ -173,12 +173,12 @@ and no official endorsement should be inferred.
 
       <p>
 [=Decentralized Identifiers=] (DIDs) are a type of identifier for verifiable,
-decentralized digital identity. These new identifiers are designed to enable the
-controller of a DID to prove control over it and to be implemented independently
-of any centralized registry, identity provider, or certificate authority. These
-sorts of identifiers often utilize a heavy-weight registry, such as ones
-utilizing Decentralized Ledger Technologies (DLT), to create, read, update, and
-deactivate DIDs.
+decentralized digital identity. These identifiers are designed to enable the
+[=controller=] of a DID to prove control over it and to be implemented
+independently of any centralized registry, identity provider, or certificate
+authority. These sorts of identifiers often utilize a heavy-weight registry,
+such as ones utilizing Decentralized Ledger Technologies (DLT), to create, read,
+update, and deactivate DIDs.
       </p>
 
       <p>
@@ -186,10 +186,31 @@ While DLT-based DID Methods have great decentralization characteristics, and
 some of the more centralized DID Methods provide strong system control
 guarantees, the general approaches tend to be expensive to setup and operate.
 Some use cases requiring DIDs do not need the guarantees provided by these
-heavy-weight systems. For example, a DID that will only be used for a single,
-ephemeral interaction might not need to be registered, updated, or deactivated,
-or where private keys are protected by software or hardware isolation.
-These are a few of the cases where using `did:key` might offer unique benefits.
+heavy-weight systems. The `did:key` method offers a lightweight alternative that
+provides several distinct advantages in specific scenarios: immediate
+availability without network dependencies, deterministic resolution requiring no
+registry lookups, zero infrastructure costs, complete offline operation
+capability, and maximum simplicity in implementation. These characteristics make
+`did:key` particularly well-suited for ephemeral interactions, development and
+testing environments, bootstrap scenarios, and situations where the overhead of
+registry operations is not justified by the duration or value of the
+interaction.
+      </p>
+
+      <p>
+The choice to use `did:key` over a registry-based DID method is primarily driven
+by the temporal nature and risk profile of the intended use case. Registry-based
+methods excel when persistent identity, key rotation, recovery mechanisms, or
+deactivation capabilities are required—such as for long-term business
+relationships, credential issuance by established organizations, or scenarios
+involving high-value transactions. In contrast, `did:key` is optimal for
+short-lived sessions where the identifier will be used for days to weeks,
+peer-to-peer communications that do not require persistent identity, temporary
+credential presentations, or situations where the keys are protected by hardware
+security modules and can be rotated at the application layer. The deterministic
+nature of `did:key` also makes it valuable for testing and development, as the
+same key material always produces the same identifier without requiring access
+to external registries or networks.
       </p>
 
       <p class="advisement">
@@ -198,9 +219,9 @@ with high confidence in hardware isolation.
       </p>
 
       <p>
-The rest of this document outlines the syntax for the `did:key` method,
-the operations it supports, and some security and privacy considerations that
-implementers might want to be aware of when implementing.
+The rest of this document outlines the syntax for the `did:key` identifier, the
+operations supported by the `did:key` method, and some security and privacy
+considerations that implementers might want to be aware of when implementing.
       </p>
 
       <section id="conformance"></section>
