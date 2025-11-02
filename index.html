@@ -317,7 +317,7 @@ Implementations are expected to set a reasonable default for the
 The <em>options.enableExperimentalPublicKeyTypes</em> value SHOULD be set to
 `false`. The <em>options.defaultContext</em> value SHOULD be set to an array
 where the first element is the string value `https://www.w3.org/ns/did/v1`.
-Defaults MAY be overridden by the caller of this algorithm. A <em>document</em>
+Defaults might be overridden by the caller of this algorithm. A <em>document</em>
 is the resulting output.
           </p>
 
@@ -865,7 +865,7 @@ The `did:key` method encodes the public key directly in the identifier itself,
 creating a deterministic relationship between the key material and the DID.
 This means that any two systems that receive the same `did:key` identifier can
 immediately recognize it as referring to the same subject, enabling correlation
-across different contexts and relying parties. Unlike registry-based DID methods
+across different contexts and verifiers. Unlike registry-based DID methods
 where the identifier can be an opaque value, `did:key` identifiers are
 intrinsically tied to the cryptographic key, making the identifier both globally
 unique and globally correlatable.
@@ -898,7 +898,7 @@ continuity of the underlying digital identity.
 In long-lived relationships or scenarios where privacy requirements evolve over
 time, the inability to rotate keys without changing identifiers forces a choice
 between maintaining identifier continuity and improving privacy posture. This
-makes `did:key` particularly unsuitable for use cases where subjects may need
+makes `did:key` particularly unsuitable for use cases where subjects might need
 to respond to correlation attacks, regulatory requirements for periodic key
 updates, or evolving privacy threat models over the lifetime of the identifier.
         </p>
@@ -922,7 +922,7 @@ This constant exposure of public key material increases the attack surface for
 cryptanalysis and makes it impossible to implement selective disclosure of
 verification methods. It also means that any storage or transmission of the
 identifier itself, regardless of context, constitutes storage and transmission
-of cryptographic material, which may have implications for systems with strict
+of cryptographic material, which might have implications for systems with strict
 data handling requirements or key management policies.
         </p>
       </section>
@@ -971,11 +971,28 @@ of the [[[DID]]] specification, before reading this section.
 
         <p>
 The `did:key` method is a purely generative method, which means that
-updates are not supported. This can be an issue if a `did:key` is
-expected to be used over a long period of time. For example, if a
-`did:key` is ever compromised, it is not possible to rotate the
-compromised key. For this reason, using a `did:key` for interactions
-that last weeks to months is strongly discouraged.
+updates are not supported. This creates a security concern
+for any long-lived use of the identifier, as there is no mechanism to rotate
+cryptographic keys in response to potential compromise, suspected exposure,
+or as part of routine security hygiene practices. If a private key associated
+with a `did:key` is compromised through theft, social engineering, malware,
+side-channel attacks, or any other means, the attacker gains permanent control
+over that identity with no possibility for the legitimate controller to regain
+exclusive control by rotating to new key material.
+        </p>
+
+        <p>
+This limitation is of concern because best practices in cryptographic
+key management typically mandate periodic key rotation even in the absence of
+known compromise, as a defense-in-depth measure against undetected breaches.
+Modern security frameworks often require key rotation on regular schedules or
+after personnel changes, system migrations, or security incidents. The `did:key`
+method's inability to support these practices means that any use beyond
+short-lived, ephemeral interactions carries inherent and unmitigable risk of
+permanent compromise. To mitigate this concern, long-term use of `did:key`
+is expected to be via hardware security modules with the `did:key` value
+itself being rotated in whatever process it is used in on an acceptable
+cadence.
         </p>
       </section>
 
@@ -983,12 +1000,23 @@ that last weeks to months is strongly discouraged.
         <h3>Deactivation Not Supported</h3>
 
         <p>
-The `did:key` method is a purely generative method, which means that
-deactivations are not supported. This can be an issue if a `did:key` is
-expected to be used over a long period of time. For example, if a
-`did:key` is ever compromised, it is not possible to deactivate the  DID
-to stop an attacker from using it. For this reason, using a `did:key` for
-interactions that last weeks to months is strongly discouraged.
+The `did:key` method provides no mechanism for deactivating or revoking an
+identifier once it has been created and distributed. In the event of key
+compromise, loss of control, or the need to terminate an identity for security
+reasons, there is no way to signal to verifiers that the `did:key` is not to be
+trusted or accepted other than via a high-level mechanism such as the revocation
+of a [=verifiable credential=] that is associated with the `did:key` identifier.
+        </p>
+
+        <p>
+In contrast to did:key, registry-based DID methods can publish a deactivation
+status or remove the [=DID Document=] entirely, providing a clear signal to all
+verifiers that the identifier is no longer valid. Without deactivation
+support, security incident response for `did:key` is limited to out-of-band
+communication. This makes `did:key` not ideal in scenarios involving high-value
+transactions, legally binding agreements, or situations where unauthorized use
+of the identity could cause significant harm to the controller or relying
+parties.
         </p>
       </section>
 
@@ -996,11 +1024,30 @@ interactions that last weeks to months is strongly discouraged.
         <h3>Key Derivation Lacks Proof</h3>
 
         <p>
-Some implementations might utlize a key derivation function when converting from
-an ed25519 public key to a Curve25519 ECDH key, used in the
-`keyAgreement` verification method. It is expected that this is a
-relatively safe operation, but implementers might consider that there exists no
-mathematical proof that confirms this assumption.
+Some implementations might utilize a key derivation function when converting
+from an Ed25519 public key to a Curve25519 ECDH key for use in the
+`keyAgreement` verification method. While this conversion is supported by the
+specification and is believed to be cryptographically sound based on the
+mathematical relationship between the Edwards curve (Ed25519) and the Montgomery
+curve (Curve25519) representations of Curve25519, there is no complete
+mathematical proof that this derivation preserves the full security properties
+of the original key in all contexts. This introduces a potential security risk,
+as subtle vulnerabilities in the conversion process could potentially be
+exploited to weaken the encryption key agreement without compromising the
+signature key.
+        </p>
+
+        <p>
+The security concern is compounded by the fact that the same underlying key
+material is being used for two different cryptographic purposes—digital
+signatures and key agreement—which violates the cryptographic principle of key
+separation. While research such as [[THORMARKER]] provides analysis supporting
+the safety of this practice for Ed25519/X25519 specifically, implementers are
+relying on carefully constructed mathematical relationships rather than formally
+proven security guarantees. Organizations with strict security requirements
+might prefer to use separate key pairs for signature and encryption operations,
+which would require generating and managing multiple `did:key` identifiers
+rather than relying on key derivation.
         </p>
       </section>
 
@@ -1009,9 +1056,29 @@ mathematical proof that confirms this assumption.
 
         <p>
 Since there is no support for update and deactivate for the `did:key`
-method, it is not possible to recover from a security compromise. For this
-reason, using a `did:key` for interactions that last weeks to months is
-strongly discouraged.
+method, it is not possible to recover from a security compromise, making
+long-term use inherently risky. The security posture of a `did:key` can only
+degrade over time as the private key is exposed to an increasing number of
+potential attack vectors—including storage vulnerabilities, backup procedures,
+key usage in multiple contexts, potential cryptographic weaknesses discovered
+in the future, and the general accumulation of attack surface over extended
+periods. Any long-lived `did:key` essentially becomes a single point of
+failure where compromise at any point during its lifetime results in permanent
+and irrecoverable security breach.
+        </p>
+
+        <p>
+For this reason, using a `did:key` for interactions that last weeks to months is
+strongly discouraged unless it is coupled with a hardware security module of
+some kind. Use beyond short-lived contexts is to be carefully evaluated against
+specific threat models. The method is most appropriate for scenarios such as
+ephemeral peer-to-peer connections, short-lived authentication sessions,
+temporary delegation of capabilities, or situations where the identifier will be
+used only a small number of times with a limited set of verifiers. For any use
+case requiring persistent identity over extended periods, involving high-value
+assets, containing sensitive data, or subject to regulatory compliance
+requirements, implementers might instead consider registry-based DID methods
+that support key rotation, recovery mechanisms, and deactivation capabilities.
         </p>
       </section>
 
