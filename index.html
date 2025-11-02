@@ -590,9 +590,6 @@ Ensure that <code>d</code> is NOT present.
             </li>
           </ol>
 
-          <p class="issue" data-number="55">
-Address RSA encoding for DER encoded RSA keys.
-          </p>
           <p class="issue" data-number="54">
 Address BLS12-381 Encoding.
           </p>
@@ -825,137 +822,6 @@ This DID Method does not support deactivating the DID Document.
     </section>
 
     <section class="informative">
-      <h2>Test Vectors</h2>
-
-
-      <p>For a full list of test vectors see <a href="https://github.com/w3c-ccg/did-method-key/tree/main/test-vectors">test vectors</a>.</p>
-      <p>We provide only the <code>verificationMethod</code> section of the DID Document in these examples.</p>
-
-      <section class="informative">
-        <h3>Ed25519</h3>
-        <p>These DIDs always start with <code>z6Mk</code>.</p>
-
-        <pre class="example">
-          did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp
-          did:key:z6MkjchhfUsD6mmvni8mCdXHw216Xrm9bQe2mBH1P5RDjVJG
-          did:key:z6MknGc3ocHs3zdPiJbnaaqDi58NGb4pk1Sp9WxWufuXSdxf
-        </pre>
-
-        <pre class="example nohighlight did-key"
-          title="An did:key DID Document expressing an Ed25519 public key useful with the EdDSA"
-          data-did='did:key:z6Mkf5rGMoatrSj1f4CyvuHBeXJELe9RPdzo2PKGNCKVtZxP'>
-        </pre>
-
-      </section>
-
-      <section class="informative">
-        <h3>Ed25519 with X25519</h3>
-
-        <p>
-It is possible to derive an X25519 key from an Ed25519 one. An X25519 key is
-useful when perform such functions as key agreement between two systems.
-        </p>
-
-        <pre class="example" title="An did:key DID Document expressing an Ed25519 public key and an X25519 public key useful with the EdDSA and key agreement protocols">
-{
-  "@context": [
-    "https://www.w3.org/ns/did/v1",
-    "https://w3id.org/security/multikey/v1"
-  ],
-  "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-  "verificationMethod": [{
-    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-    "type": "Multikey",
-    "controller": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-    "publicKeyMultibase": "z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-  }],
-  "authentication": [
-    "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-  ],
-  "assertionMethod": [
-    "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-  ],
-  "capabilityDelegation": [
-    "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-  ],
-  "capabilityInvocation": [
-    "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
-  ],
-  "keyAgreement": [{
-    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6LSj72tK8brWgZja8NLRwPigth2T9QRiG1uH9oKZuKjdh9p",
-    "type": "Multikey",
-    "controller": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-    "publicKeyMultibase": "z6LSj72tK8brWgZja8NLRwPigth2T9QRiG1uH9oKZuKjdh9p"
-  }]
-}
-        </pre>
-
-      </section>
-
-      <section class="informative">
-        <h3>Secp256k1</h3>
-          <p>These DID always start with <code>zQ3s</code>.</p>
-        <pre class="example">
-          did:key:zQ3shokFTS3brHcDQrn82RUDfCZESWL1ZdCEJwekUDPQiYBme
-          did:key:zQ3shtxV1FrJfhqE1dvxYRcCknWNjHc3c5X1y3ZSoPDi2aur2
-          did:key:zQ3shZc2QzApp2oymGvQbzP8eKheVshBHbU4ZYjeXqwSKEn6N
-        </pre>
-      </section>
-
-      <section class="informative">
-        <h3>BLS 12-381</h3>
-          <p>These DID always start with <code>zUC7</code>.</p>
-        <pre class="example">
-          did:key:zUC7K4ndUaGZgV7Cp2yJy6JtMoUHY6u7tkcSYUvPrEidqBmLCTLmi6d5WvwnUqejscAkERJ3bfjEiSYtdPkRSE8kSa11hFBr4sTgnbZ95SJj19PN2jdvJjyzpSZgxkyyxNnBNnY
-          did:key:zUC7KKoJk5ttwuuc8pmQDiUmtckEPTwcaFVZe4DSFV7fURuoRnD17D3xkBK3A9tZqdADkTTMKSwNkhjo9Hs6HfgNUXo48TNRaxU6XPLSPdRgMc15jCD5DfN34ixjoVemY62JxnW
-        </pre>
-
-        <p>An example DID Document for a BLS12-381 key is shown below.</p>
-
-        <pre class="example nohighlight did-key"
-          title="An did:key DID Document expressing a BLS12-381 G2 group public key useful with the BBSDSA"
-          data-did='did:key:zUC7EK3ZakmukHhuncwkbySmomv3FmrkmS36E4Ks5rsb6VQSRpoCrx6Hb8e2Nk6UvJFSdyw9NK1scFXJp21gNNYFjVWNgaqyGnkyhtagagCpQb5B7tagJu3HDbjQ8h5ypoHjwBb'>
-        </pre>
-
-      </section>
-
-      <section class="informative">
-        <h3>P-256</h3>
-          <p>These DID always start with <code>zDn</code>.</p>
-        <pre class="example">
-          did:key:zDnaerDaTF5BXEavCrfRZEk316dpbLsfPDZ3WJ5hRTPFU2169
-          did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv
-        </pre>
-
-        <p>An example DID Document for a P-256 key is shown below.</p>
-
-        <pre class="example nohighlight did-key"
-          title="An did:key DID Document expressing a P-256 public key useful with the ECDSA"
-          data-did='did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv'>
-        </pre>
-
-      </section>
-
-      <section class="informative">
-        <h3>P-384</h3>
-          <p>These DID always start with <code>z82</code>.</p>
-        <pre class="example">
-          did:key:z82Lm1MpAkeJcix9K8TMiLd5NMAhnwkjjCBeWHXyu3U4oT2MVJJKXkcVBgjGhnLBn2Kaau9
-          did:key:z82LkvCwHNreneWpsgPEbV3gu1C6NFJEBg4srfJ5gdxEsMGRJUz2sG9FE42shbn2xkZJh54
-        </pre>
-
-        <p>An example DID Document for a P-384 key is shown below.</p>
-
-        <pre class="example nohighlight did-key"
-          title="An did:key DID Document expressing a P-384 public key useful with the ECDSA"
-          data-did='did:key:z82LkvCwHNreneWpsgPEbV3gu1C6NFJEBg4srfJ5gdxEsMGRJUz2sG9FE42shbn2xkZJh54'>
-        </pre>
-
-      </section>
-
-    </section>
-
-    <section class="informative">
       <h2>Security and Privacy Considerations</h2>
 
       <p>
@@ -1011,6 +877,129 @@ reason, using a <tt>did:key</tt> for interactions that last weeks to months is
 strongly discouraged.
         </p>
       </section>
+
+    </section>
+
+  </section>
+
+  <section class="appendix informative">
+    <h2>Test Vectors</h2>
+
+    <p>We provide only the <code>verificationMethod</code> section of the DID Document in these examples.</p>
+
+    <section class="informative">
+      <h3>Ed25519</h3>
+
+      <pre class="example">
+        did:key:z6Mkf5rGMoatrSj1f4CyvuHBeXJELe9RPdzo2PKGNCKVtZxP
+      </pre>
+
+      <pre class="example nohighlight did-key"
+        title="An did:key DID Document expressing an Ed25519 public key useful with the EdDSA"
+        data-did='did:key:z6Mkf5rGMoatrSj1f4CyvuHBeXJELe9RPdzo2PKGNCKVtZxP'>
+      </pre>
+
+    </section>
+
+    <section class="informative">
+      <h3>Ed25519 with X25519</h3>
+
+      <p>
+It is possible to derive an X25519 key from an Ed25519 one. An X25519 key is
+useful when perform such functions as key agreement between two systems.
+      </p>
+
+      <pre class="example" title="An did:key DID Document expressing an Ed25519 public key and an X25519 public key useful with the EdDSA and key agreement protocols">
+{
+"@context": [
+  "https://www.w3.org/ns/did/v1",
+  "https://w3id.org/security/multikey/v1"
+],
+"id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+"verificationMethod": [{
+  "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+  "type": "Multikey",
+  "controller": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+  "publicKeyMultibase": "z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+}],
+"authentication": [
+  "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+],
+"assertionMethod": [
+  "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+],
+"capabilityDelegation": [
+  "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+],
+"capabilityInvocation": [
+  "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK"
+],
+"keyAgreement": [{
+  "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK#z6LSj72tK8brWgZja8NLRwPigth2T9QRiG1uH9oKZuKjdh9p",
+  "type": "Multikey",
+  "controller": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+  "publicKeyMultibase": "z6LSj72tK8brWgZja8NLRwPigth2T9QRiG1uH9oKZuKjdh9p"
+}]
+}
+      </pre>
+
+    </section>
+
+    <section class="informative">
+      <h3>Secp256k1</h3>
+        <p>These DID always start with <code>zQ3s</code>.</p>
+      <pre class="example">
+        did:key:zQ3shokFTS3brHcDQrn82RUDfCZESWL1ZdCEJwekUDPQiYBme
+        did:key:zQ3shtxV1FrJfhqE1dvxYRcCknWNjHc3c5X1y3ZSoPDi2aur2
+        did:key:zQ3shZc2QzApp2oymGvQbzP8eKheVshBHbU4ZYjeXqwSKEn6N
+      </pre>
+    </section>
+
+    <section class="informative">
+      <h3>BLS 12-381</h3>
+
+      <pre class="example">
+did:key:zUC7EK3ZakmukHhuncwkbySmomv3FmrkmS36E4Ks5rsb6VQSRpoCrx6Hb8e2Nk6UvJFSdyw9NK1scFXJp21gNNYFjVWNgaqyGnkyhtagagCpQb5B7tagJu3HDbjQ8h5ypoHjwBb
+      </pre>
+
+      <p>An example DID Document for a BLS12-381 key is shown below.</p>
+
+      <pre class="example nohighlight did-key"
+        title="An did:key DID Document expressing a BLS12-381 G2 group public key useful with the BBSDSA"
+        data-did='did:key:zUC7EK3ZakmukHhuncwkbySmomv3FmrkmS36E4Ks5rsb6VQSRpoCrx6Hb8e2Nk6UvJFSdyw9NK1scFXJp21gNNYFjVWNgaqyGnkyhtagagCpQb5B7tagJu3HDbjQ8h5ypoHjwBb'>
+      </pre>
+
+    </section>
+
+    <section class="informative">
+      <h3>P-256</h3>
+
+      <pre class="example">
+did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv
+      </pre>
+
+      <p>An example DID Document for a P-256 key is shown below.</p>
+
+      <pre class="example nohighlight did-key"
+        title="An did:key DID Document expressing a P-256 public key useful with the ECDSA"
+        data-did='did:key:zDnaerx9CtbPJ1q36T5Ln5wYt3MQYeGRG5ehnPAmxcf5mDZpv'>
+      </pre>
+
+    </section>
+
+    <section class="informative">
+      <h3>P-384</h3>
+
+      <pre class="example">
+        did:key:z82LkvCwHNreneWpsgPEbV3gu1C6NFJEBg4srfJ5gdxEsMGRJUz2sG9FE42shbn2xkZJh54
+      </pre>
+
+      <p>An example DID Document for a P-384 key is shown below.</p>
+
+      <pre class="example nohighlight did-key"
+        title="An did:key DID Document expressing a P-384 public key useful with the ECDSA"
+        data-did='did:key:z82LkvCwHNreneWpsgPEbV3gu1C6NFJEBg4srfJ5gdxEsMGRJUz2sG9FE42shbn2xkZJh54'>
+      </pre>
 
     </section>
 
